@@ -1,2 +1,2 @@
 # LIB-jobs
-LinksInBio.in/jobs scrapping tool 
+https://linksinbio.in/jobs/ scrapping tool 
