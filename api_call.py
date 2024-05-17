@@ -8,10 +8,12 @@ class ApiCall():
         self.get_post_api_url = url+"wp-json/wp/v2/posts"
         return self.get_post_api_url
     
-    def makeApiRequest(self, url, tags):
-        url = self.convertURL(url)
+    def makeApiRequest(self, url, tags, site_id, otl):
+        self.url = self.convertURL(url)
+        self.site_id = site_id
+        self.otl = otl
         try:
-            response = requests.get(url)
+            response = requests.get(self.url)
             # Check if the request was successful (status code 200)
             if response.status_code == 200:
                 # If successful, return the response JSON data
@@ -29,10 +31,6 @@ class ApiCall():
             return None
         
     def dataFinishing(self, json_data):
-        for key in json_data:
-            with open('abcd.json', "a", encoding='UTF-8') as file:
-                # Append data to the file
-                file.write("\n")  # Add a newline before appending if needed
-                file.write(str(key['slug']))
-                break
+        for post in json_data:
+            pass
                 

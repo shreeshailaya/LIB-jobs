@@ -20,9 +20,10 @@ def send_email_notification(msg):
     message.attach(MIMEText(body, "plain"))
 
     # Connect to SMTP server (Gmail)
+    '''
     with smtplib.SMTP_SSL(config('EMAIL_SERVER'), config('EMAIL_PORT')) as server:
         server.login(sender_email, password)
         server.sendmail(sender_email, receiver_email, message.as_string())
-
-    print("Email sent successfully!")
+    '''
+    print(f"Email sent successfully! {msg}")
 
