@@ -1,17 +1,23 @@
 from decouple import config
-from utility import send_email_notification
+from utility import send_email_notification, publish_post
+from datetime import datetime, timedelta
 import requests 
 
 class ApiCall():
 
     def convertURL(self, url):
-        self.get_post_api_url = url+"wp-json/wp/v2/posts"
-        return self.get_post_api_url
+        if self.otl:
+            url = url+"wp-json/wp/v2/posts?per_page=100"
+        else:
+            url = url+"wp-json/wp/v2/posts"
+        return url
     
     def makeApiRequest(self, url, tags, site_id, otl):
+        self.otl = otl
         self.url = self.convertURL(url)
         self.site_id = site_id
-        self.otl = otl
+        print(self.url)
+        
         try:
             response = requests.get(self.url)
             # Check if the request was successful (status code 200)
@@ -31,6 +37,18 @@ class ApiCall():
             return None
         
     def dataFinishing(self, json_data):
+        current_time = datetime.now()
+        offset_time = current_time - timedelta(days=15)
         for post in json_data:
-            pass
+            if self.otl:
+                if post["date"] < offset_time:
+                    title = post["title"]["rendered"]
+                    content = post["content"]["rendered"]
+                    post_id = post["id"]
+                    publish_post(post_content=content, title=title, post_id=post_id)
+            else:
+                pass
+
+                
+
                 
