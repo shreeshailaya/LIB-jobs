@@ -29,7 +29,9 @@ jobs:
 
     - name: Export environment variables
       run: |
-        export $(cat .env | xargs)
+        set -a
+          source .env
+          set +a
       
     - name: Install dependencies
       run: |
