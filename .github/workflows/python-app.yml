@@ -40,11 +40,11 @@ jobs:
         echo "SITES_DATA=${{ secrets.SITES_DATA }}" >> .env
         
 
-    - name: Export environment variables
-      run: |
-        set -a
-          source .env
-          set +a
+    # - name: Export environment variables
+    #   run: |
+    #     set -a
+    #       source .env
+    #       set +a
       
     - name: Install dependencies
       run: |
