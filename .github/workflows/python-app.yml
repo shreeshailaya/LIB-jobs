@@ -27,17 +27,17 @@ jobs:
     - name: Create .env file
       run: |
         echo "WP_TOKEN=${{ secrets.WP_TOKEN }}" >> .env
-        echo "WP_TOKEN=${{ secrets.ADMIN_EMAIL }}" >> .env
-        echo "WP_TOKEN=${{ secrets.ALERT_EMAIL }}" >> .env
-        echo "WP_TOKEN=${{ secrets.EMAIL_PASSWORD }}" >> .env
-        echo "WP_TOKEN=${{ secrets.EMAIL_SERVER }}" >> .env
-        echo "WP_TOKEN=${{ secrets.EMAIL_PORT }}" >> .env
-        echo "WP_TOKEN=${{ secrets.HOST_NAME }}" >> .env
-        echo "WP_TOKEN=${{ secrets.USER_NAME }}" >> .env
-        echo "WP_TOKEN=${{ secrets.USER_PASSWORD }}" >> .env
-        echo "WP_TOKEN=${{ secrets.DB_NAME }}" >> .env
-        echo "WP_TOKEN=${{ secrets.LOG_TABLE }}" >> .env
-        echo "WP_TOKEN=${{ secrets.SITES_DATA }}" >> .env
+        echo "ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }}" >> .env
+        echo "ALERT_EMAIL=${{ secrets.ALERT_EMAIL }}" >> .env
+        echo "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> .env
+        echo "EMAIL_SERVER=${{ secrets.EMAIL_SERVER }}" >> .env
+        echo "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> .env
+        echo "HOST_NAME=${{ secrets.HOST_NAME }}" >> .env
+        echo "USER_NAME=${{ secrets.USER_NAME }}" >> .env
+        echo "USER_PASSWORD=${{ secrets.USER_PASSWORD }}" >> .env
+        echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
+        echo "LOG_TABLE=${{ secrets.LOG_TABLE }}" >> .env
+        echo "SITES_DATA=${{ secrets.SITES_DATA }}" >> .env
         
 
     - name: Export environment variables
