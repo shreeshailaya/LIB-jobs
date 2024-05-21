@@ -25,7 +25,7 @@ jobs:
         python-version: "3.10"
 
     - name: Create .env file
-      run: echo "${{ secrets.ENV_FILE }}" > .env
+      run: echo "WP_TOKEN=${{ secrets.WP_TOKEN }}" >> .env
 
     - name: Export environment variables
       run: |
