@@ -1,4 +1,5 @@
 import smtplib
+import json
 import requests
 import constants
 from decouple import config
@@ -29,13 +30,13 @@ def send_email_notification(msg):
     '''
     print(f"Email sent successfully! {msg}")
 
-def publish_post(title,post_content, post_id):        
+def publish_post(title,post_content, post_id, tags):        
     # Create a new post data
     new_post_data = {
         'title': title,
         'content': post_content,
         'status': 'publish',
-        "categories": [2]
+        "categories": json.loads(tags),
         # 'meta':{
         # 'company_name':'abc',
         # 'job___':"zxc"

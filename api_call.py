@@ -16,6 +16,7 @@ class ApiCall():
         self.otl = otl
         self.url = self.convertURL(url)
         self.site_id = site_id
+        self.tags = tags
         print(self.url)
         
         try:
@@ -47,14 +48,14 @@ class ApiCall():
                     content = post["content"]["rendered"]
                     post_id = post["id"]
                     print(title, post_id)
-                    publish_post(post_content=content, title=title, post_id=post_id)
+                    publish_post(post_content=content, title=title, post_id=post_id, tags=self.tags)
                 else:
                     print("no post found ")
             else:
                 title = post["title"]["rendered"]
                 content = post["content"]["rendered"]
                 post_id = post["id"]
-                publish_post(post_content=content, title=title, post_id=post_id)
+                publish_post(tags=self.tags,post_content=content, title=title, post_id=post_id)
 
                 break
 
