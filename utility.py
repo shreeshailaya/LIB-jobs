@@ -45,7 +45,7 @@ def publish_post(title,post_content, post_id):
     post_url = f'{constants.URL}wp-json/wp/v2/posts'
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': f'Bearer {config('WP_TOKEN')}'
+        'Authorization': f"Bearer {config('WP_TOKEN')}"
     }
 
     response = requests.post(post_url, headers=headers, json=new_post_data)
