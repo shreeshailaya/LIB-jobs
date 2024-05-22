@@ -10,7 +10,7 @@ def initial_site_registration(site_data, url, tags):
     if len(check_site) > 0:
         return check_site[0]['id'], False
     else:
-        register_site_query = f"INSERT INTO {config('LOG_TABLE')} (site,last_fetched_id, site_data, registration_date) VALUES('{url}',-1,'{site_data}',now());"
+        register_site_query = f"INSERT INTO {config('LOG_TABLE')} (site,last_fetched_id, site_data, registration_date,total_no_of_posts_fetched) VALUES('{url}',-1,'{site_data}',now(), 0);"
         execute_query(register_site_query)
         check_created_site = execute_query(site_check_query)
 
