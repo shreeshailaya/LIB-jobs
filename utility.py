@@ -34,7 +34,8 @@ def publish_post(title,post_content, post_id):
     new_post_data = {
         'title': title,
         'content': post_content,
-        'status': 'publish'
+        'status': 'publish',
+        "categories": [2]
         # 'meta':{
         # 'company_name':'abc',
         # 'job___':"zxc"
@@ -42,7 +43,7 @@ def publish_post(title,post_content, post_id):
     }
 
     # Make a POST request to create a new post
-    post_url = f'{constants.URL}wp-json/wp/v2/posts'
+    post_url = f'https://{config("HOST_NAME")}/jobs/wp-json/wp/v2/posts'
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f"Bearer {config('WP_TOKEN')}"
