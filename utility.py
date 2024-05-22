@@ -30,7 +30,7 @@ def send_email_notification(msg):
     '''
     print(f"Email sent successfully! {msg}")
 
-def publish_post(title,post_content, post_id, tags):        
+def publish_post(title,post_content, tags):        
     # Create a new post data
     new_post_data = {
         'title': title,
