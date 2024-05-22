@@ -16,6 +16,7 @@ class ApiCall():
         self.otl = otl
         self.url = self.convertURL(url)
         self.site_id = site_id
+        self.tags = tags
         print(self.url)
         
         try:
@@ -39,15 +40,24 @@ class ApiCall():
     def dataFinishing(self, json_data):
         current_time = datetime.now()
         offset_time = current_time - timedelta(days=15)
+        print(offset_time)
         for post in json_data:
             if self.otl:
-                if post["date"] < offset_time:
+                if datetime.fromisoformat(post["date"]) < offset_time:
                     title = post["title"]["rendered"]
                     content = post["content"]["rendered"]
                     post_id = post["id"]
-                    publish_post(post_content=content, title=title, post_id=post_id)
+                    print(title, post_id)
+                    publish_post(post_content=content, title=title, post_id=post_id, tags=self.tags)
+                else:
+                    print("no post found ")
             else:
-                pass
+                title = post["title"]["rendered"]
+                content = post["content"]["rendered"]
+                post_id = post["id"]
+                publish_post(tags=self.tags,post_content=content, title=title, post_id=post_id)
+
+                break
 
                 
 
