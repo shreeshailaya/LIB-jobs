@@ -20,15 +20,15 @@ def send_email_notification(msg):
     message["Subject"] = "ALERT FROM LIB-jobs"
 
     # Email content
-    body = msg
+    body = str(msg)
     message.attach(MIMEText(body, "plain"))
 
     # Connect to SMTP server (Gmail)
-    '''
+    
     with smtplib.SMTP_SSL(config('EMAIL_SERVER'), config('EMAIL_PORT')) as server:
         server.login(sender_email, password)
         server.sendmail(sender_email, receiver_email, message.as_string())
-    '''
+    
     print(f"Email sent successfully! {msg}")
 
 def publish_post(title,post_content, tags):        
@@ -71,4 +71,7 @@ def tag_generator(title, tags):
         contains_keywords = any(keyword.lower() in title for keyword in list_keywords)
         if contains_keywords:
             tags.append(key)
-    return tags
+    tags = tuple(tags)
+    tags = str(list(tags))
+    print(tags, type(tags))
+    return tags.replace("'",'')

@@ -1,5 +1,5 @@
 from decouple import config
-from utility import send_email_notification, publish_post
+from utility import send_email_notification, publish_post, tag_generator
 from sql_connector import execute_query
 import constants
 from datetime import datetime, timedelta
@@ -53,7 +53,7 @@ class ApiCall():
                     title = post["title"]["rendered"]
                     content = post["content"]["rendered"]
                     post_ids_list.append(post["id"])
-                    
+                    self.tags = tag_generator(title=title, tags=self.tags)
                     publish_post(post_content=content, title=title, tags=self.tags)
                 else:
                     print("no post found ")
@@ -62,6 +62,7 @@ class ApiCall():
                     title = post["title"]["rendered"]
                     content = post["content"]["rendered"]
                     post_ids_list.append(post["id"])
+                    self.tags = tag_generator(title=title, tags=self.tags)
                     publish_post(tags=self.tags,post_content=content, title=title)
         if post_ids_list != []:
             max_of_ids = max(post_ids_list)
