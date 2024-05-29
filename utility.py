@@ -72,4 +72,3 @@ def tag_generator(title, tags):
         if contains_keywords:
             tags.append(key)
     return tags
-print(tag_generator("software developer fresher", [1]))
