@@ -63,10 +63,11 @@ class ApiCall():
                     content = post["content"]["rendered"]
                     post_ids_list.append(post["id"])
                     publish_post(tags=self.tags,post_content=content, title=title)
-        max_of_ids = max(post_ids_list)
-        number_of_posts = len(post_ids_list)
-        update_log_table_query = f"UPDATE {config('LOG_TABLE')} SET last_fetched_id = {max_of_ids}, total_no_of_posts_fetched = total_no_of_posts_fetched+{number_of_posts} WHERE site = '{constants.URL}';"
-        execute_query(update_log_table_query)
-                
+        if post_ids_list != []:
+            max_of_ids = max(post_ids_list)
+            number_of_posts = len(post_ids_list)
+            update_log_table_query = f"UPDATE {config('LOG_TABLE')} SET last_fetched_id = {max_of_ids}, total_no_of_posts_fetched = total_no_of_posts_fetched+{number_of_posts} WHERE site = '{constants.URL}';"
+            execute_query(update_log_table_query)
+                    
 
                 

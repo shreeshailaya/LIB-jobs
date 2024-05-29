@@ -1,4 +1,5 @@
 import smtplib
+import ast
 import json
 import requests
 import constants
@@ -57,3 +58,18 @@ def publish_post(title,post_content, tags):
         print('New post ID:', response.json()['id'])
     else:
         print('Error creating the post:', response.status_code, response.text)
+
+def tag_generator(title, tags):
+    title = title.lower()
+    tags = str(tags)
+    tags = ast.literal_eval(tags.replace('"',"'"))
+    tags_config = config("TAGS")
+    tags_config = json.loads(tags_config)
+    for key in tags_config:
+        list_keywords = tags_config[key]
+        list_keywords=ast.literal_eval(list_keywords)
+        contains_keywords = any(keyword.lower() in title for keyword in list_keywords)
+        if contains_keywords:
+            tags.append(key)
+    return tags
+print(tag_generator("software developer fresher", [1]))
