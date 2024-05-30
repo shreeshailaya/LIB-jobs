@@ -73,5 +73,4 @@ def tag_generator(title, tags):
             tags.append(key)
     tags = tuple(tags)
     tags = str(list(tags))
-    print(tags, type(tags))
     return tags.replace("'",'')
