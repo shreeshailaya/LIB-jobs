@@ -20,7 +20,7 @@ def create_connection():
         )
         print("Connection to MySQL DB successful")
     except Error as e:
-        send_email_notification(f"Unable to connect DB --> {e}")
+        send_email_notification(subject=f"Unable to Connect DB", msg=f"Unable to connect DB --> {e}")
         print(f"The error '{e}' occurred")
     return connection
 

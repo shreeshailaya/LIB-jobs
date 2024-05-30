@@ -31,12 +31,12 @@ class ApiCall():
             else:
                 # If unsuccessful, print an error message
                 print("Error:", response.status_code)
-                send_email_notification(f"""Unable to access url---Status code {response.status_code} --->{url}""")
+                send_email_notification(subject="Error while creating DB connection", msg = f"""Unable to access url---Status code {response.status_code} --->{url}""")
                 return None
         except requests.exceptions.RequestException as e:
             # If there's an error during the request, print the error
             print("Error:", e)
-            send_email_notification(f"Error while accessing API -->{e}")
+            send_email_notification(subject= f"Error accessing API for {self.url}", msg=f"Error while accessing API -->{e}")
             return None
         
     def dataFinishing(self, json_data):
@@ -46,12 +46,14 @@ class ApiCall():
         last_fetched_query = f"select last_fetched_id from {config('LOG_TABLE')} where site = '{constants.URL}'"
         last_fetched_id = execute_query(last_fetched_query)
         last_fetched_id = last_fetched_id[0]["last_fetched_id"]
+        post_title_list = []
         
         for post in json_data:
             if self.otl:
                 if datetime.fromisoformat(post["date"]) < offset_time:
                     title = post["title"]["rendered"]
                     content = post["content"]["rendered"]
+                    post_title_list.append(title)
                     post_ids_list.append(post["id"])
                     self.tags = tag_generator(title=title, tags=self.tags)
                     publish_post(post_content=content, title=title, tags=self.tags)
@@ -69,6 +71,11 @@ class ApiCall():
             number_of_posts = len(post_ids_list)
             update_log_table_query = f"UPDATE {config('LOG_TABLE')} SET last_fetched_id = {max_of_ids}, total_no_of_posts_fetched = total_no_of_posts_fetched+{number_of_posts} WHERE site = '{constants.URL}';"
             execute_query(update_log_table_query)
+        if post_title_list != []:
+            if self.otl:
+                send_email_notification(subject=f"OTL DATA FETCHED FOR {self.url}", msg=post_title_list)
+            else:
+                send_email_notification(subject= f"Todays Jobs from {self.url} ",  msg=post_title_list)
                     
 
                 

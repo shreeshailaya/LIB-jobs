@@ -16,4 +16,4 @@ if __name__ == '__main__':
             site_id, otl = initial_site_registration(site_data=env_variables, url=url, tags=tags)
             api_call.makeApiRequest(url=url, tags=tags, site_id=site_id, otl = otl)
     except Exception as e:
-        send_email_notification(e)
+        send_email_notification(subject="Script Failed Error ", msg=e)

@@ -7,7 +7,7 @@ from decouple import config
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-def send_email_notification(msg):
+def send_email_notification(subject, msg):
     # Email configuration
     sender_email = config('ALERT_EMAIL')
     receiver_email = config('ADMIN_EMAIL')
@@ -17,7 +17,7 @@ def send_email_notification(msg):
     message = MIMEMultipart()
     message["From"] = sender_email
     message["To"] = receiver_email
-    message["Subject"] = "ALERT FROM LIB-jobs"
+    message["Subject"] = str(subject)
 
     # Email content
     body = str(msg)
