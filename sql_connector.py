@@ -1,8 +1,11 @@
 from decouple import config
+import time
 from utility import send_email_notification
 import mysql.connector
 from mysql.connector import Error
 
+
+current_timestamp = time.time()
 def create_connection():
     host_name=config('HOST_NAME')
     user_name=config('USER_NAME')
@@ -18,10 +21,10 @@ def create_connection():
             database=db_name,
             
         )
-        print("Connection to MySQL DB successful")
+        print(f"{current_timestamp} Connection to MySQL DB successful")
     except Error as e:
         send_email_notification(subject=f"Unable to Connect DB", msg=f"Unable to connect DB --> {e}")
-        print(f"The error '{e}' occurred")
+        print(f"{current_timestamp} The error '{e}' occurred")
     return connection
 
 def execute_query(query):

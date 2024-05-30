@@ -1,4 +1,5 @@
 import smtplib
+import time
 import ast
 import json
 import requests
@@ -52,12 +53,12 @@ def publish_post(title,post_content, tags):
     }
 
     response = requests.post(post_url, headers=headers, json=new_post_data)
-
+    current_timestamp = time.time()
     if response.status_code == 201:
         print('Post created successfully.')
-        print('New post ID:', response.json()['id'])
+        print(f'{str(current_timestamp)} New post ID:', response.json()['id'])
     else:
-        print('Error creating the post:', response.status_code, response.text)
+        print(f'{str(current_timestamp)} Error creating the post:', response.status_code, response.text)
 
 def tag_generator(title, tags):
     title = title.lower()
