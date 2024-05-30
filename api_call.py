@@ -46,17 +46,17 @@ class ApiCall():
         last_fetched_query = f"select last_fetched_id from {config('LOG_TABLE')} where site = '{constants.URL}'"
         last_fetched_id = execute_query(last_fetched_query)
         last_fetched_id = last_fetched_id[0]["last_fetched_id"]
-        post_title_list = []
+        post_title_list = {}
         
         for post in json_data:
             if self.otl:
                 if datetime.fromisoformat(post["date"]) < offset_time:
                     title = post["title"]["rendered"]
                     content = post["content"]["rendered"]
-                    post_title_list.append(title)
                     post_ids_list.append(post["id"])
                     self.tags = tag_generator(title=title, tags=self.tags)
-                    publish_post(post_content=content, title=title, tags=self.tags)
+                    slug, link = publish_post(post_content=content, title=title, tags=self.tags)
+                    post_title_list[slug] = link
                 else:
                     print("no post found ")
             else:
@@ -65,7 +65,8 @@ class ApiCall():
                     content = post["content"]["rendered"]
                     post_ids_list.append(post["id"])
                     self.tags = tag_generator(title=title, tags=self.tags)
-                    publish_post(tags=self.tags,post_content=content, title=title)
+                    slug, link = publish_post(tags=self.tags,post_content=content, title=title)
+                    post_title_list[slug] = link
         if post_ids_list != []:
             max_of_ids = max(post_ids_list)
             number_of_posts = len(post_ids_list)
@@ -73,9 +74,9 @@ class ApiCall():
             execute_query(update_log_table_query)
         if post_title_list != []:
             if self.otl:
-                send_email_notification(subject=f"OTL DATA FETCHED FOR {self.url}", msg=post_title_list)
+                send_email_notification(subject=f"OTL DATA FETCHED FOR {constants.URL}", msg=post_title_list)
             else:
-                send_email_notification(subject= f"Todays Jobs from {self.url} ",  msg=post_title_list)
+                send_email_notification(subject= f"Todays Jobs from {constants.URL} ",  msg=post_title_list)
                     
 
                 
