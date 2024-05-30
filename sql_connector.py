@@ -1,11 +1,13 @@
 from decouple import config
 import time
+import datetime
 from utility import send_email_notification
 import mysql.connector
 from mysql.connector import Error
 
 
 current_timestamp = time.time()
+current_timestamp = datetime.datetime.fromtimestamp(current_timestamp)
 def create_connection():
     host_name=config('HOST_NAME')
     user_name=config('USER_NAME')
@@ -19,7 +21,6 @@ def create_connection():
             user=user_name,
             passwd=user_password,
             database=db_name,
-            
         )
         print(f"{current_timestamp} Connection to MySQL DB successful")
     except Error as e:

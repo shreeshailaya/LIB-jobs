@@ -1,5 +1,6 @@
 import smtplib
 import time
+import datetime
 import ast
 import json
 import requests
@@ -7,6 +8,10 @@ import constants
 from decouple import config
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
+
+current_timestamp = time.time()
+current_timestamp = datetime.datetime.fromtimestamp(current_timestamp)
 
 def send_email_notification(subject, msg):
     # Email configuration
@@ -53,7 +58,6 @@ def publish_post(title,post_content, tags):
     }
 
     response = requests.post(post_url, headers=headers, json=new_post_data)
-    current_timestamp = time.time()
     if response.status_code == 201:
         print('Post created successfully.')
         print(f'{str(current_timestamp)} New post ID:', response.json()['id'])
