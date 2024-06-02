@@ -1,68 +1,68 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+# # This workflow will install Python dependencies, run tests and lint with a single version of Python
+# # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
-name: Python application
+# name: Python application
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+# on:
+#   push:
+#     branches: [ "main" ]
+#   pull_request:
+#     branches: [ "main" ]
 
-permissions:
-  contents: read
+# permissions:
+#   contents: read
 
-jobs:
-  build:
+# jobs:
+#   build:
 
-    runs-on: ubuntu-latest
+#     runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.10"
+#     steps:
+#     - uses: actions/checkout@v4
+#     - name: Set up Python 3.10
+#       uses: actions/setup-python@v3
+#       with:
+#         python-version: "3.10"
 
-    - name: Create .env file
-      run: |
-        echo "WP_TOKEN=${{ secrets.WP_TOKEN }}" >> .env
-        echo "ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }}" >> .env
-        echo "ALERT_EMAIL=${{ secrets.ALERT_EMAIL }}" >> .env
-        echo "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> .env
-        echo "EMAIL_SERVER=${{ secrets.EMAIL_SERVER }}" >> .env
-        echo "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> .env
-        echo "HOST_NAME=${{ secrets.HOST_NAME }}" >> .env
-        echo "USER_NAME=${{ secrets.USER_NAME }}" >> .env
-        echo "USER_PASSWORD=${{ secrets.USER_PASSWORD }}" >> .env
-        echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
-        echo "LOG_TABLE=${{ secrets.LOG_TABLE }}" >> .env
-        echo "ENV=${{ secrets.ENV }}" >> .env
-        echo "SITE=${{ secrets.SITE }}" >> .env
-        echo "CONFIG_TABLE=${{ secrets.CONFIG_TABLE }}" >> .env
+#     - name: Create .env file
+#       run: |
+#         echo "WP_TOKEN=${{ secrets.WP_TOKEN }}" >> .env
+#         echo "ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }}" >> .env
+#         echo "ALERT_EMAIL=${{ secrets.ALERT_EMAIL }}" >> .env
+#         echo "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> .env
+#         echo "EMAIL_SERVER=${{ secrets.EMAIL_SERVER }}" >> .env
+#         echo "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> .env
+#         echo "HOST_NAME=${{ secrets.HOST_NAME }}" >> .env
+#         echo "USER_NAME=${{ secrets.USER_NAME }}" >> .env
+#         echo "USER_PASSWORD=${{ secrets.USER_PASSWORD }}" >> .env
+#         echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
+#         echo "LOG_TABLE=${{ secrets.LOG_TABLE }}" >> .env
+#         echo "ENV=${{ secrets.ENV }}" >> .env
+#         echo "SITE=${{ secrets.SITE }}" >> .env
+#         echo "CONFIG_TABLE=${{ secrets.CONFIG_TABLE }}" >> .env
         
 
-    # - name: Export environment variables
-    #   run: |
-    #     set -a
-    #       source .env
-    #       set +a
+#     # - name: Export environment variables
+#     #   run: |
+#     #     set -a
+#     #       source .env
+#     #       set +a
       
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install flake8 pytest
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Lint with flake8
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    # - name: Test with pytest
-    #   run: |
-    #     # pytest
+#     - name: Install dependencies
+#       run: |
+#         python -m pip install --upgrade pip
+#         pip install flake8 pytest
+#         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+#     - name: Lint with flake8
+#       run: |
+#         # stop the build if there are Python syntax errors or undefined names
+#         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+#         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+#         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+#     # - name: Test with pytest
+#     #   run: |
+#     #     # pytest
 
-    - name: Test Code
-      run: |
-        python manage.py
+#     - name: Test Code
+#       run: |
+#         python manage.py
