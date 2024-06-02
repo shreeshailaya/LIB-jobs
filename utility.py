@@ -62,7 +62,7 @@ def publish_post(title,post_content, tags):
     if response.status_code == 201:
         print('Post created successfully.')
         print(f'{str(current_timestamp)} New post ID:', response.json()['id'])
-        return  data["slug"], data["link"]
+        return  data["title"]["rendered"], data["link"]
     else:
         print(f'{str(current_timestamp)} Error creating the post:', response.status_code, response.text)
 
