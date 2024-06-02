@@ -37,7 +37,9 @@ jobs:
         echo "USER_PASSWORD=${{ secrets.USER_PASSWORD }}" >> .env
         echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
         echo "LOG_TABLE=${{ secrets.LOG_TABLE }}" >> .env
-        echo "SITES_DATA=${{ secrets.SITES_DATA }}" >> .env
+        echo "ENV=${{ secrets.ENV }}" >> .env
+        echo "SITE=${{ secrets.SITE }}" >> .env
+        echo "CONFIG_TABLE=${{ secrets.CONFIG_TABLE }}" >> .env
         
 
     # - name: Export environment variables
