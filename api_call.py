@@ -72,7 +72,7 @@ class ApiCall():
             number_of_posts = len(post_ids_list)
             update_log_table_query = f"UPDATE {config('LOG_TABLE')} SET last_fetched_id = {max_of_ids}, total_no_of_posts_fetched = total_no_of_posts_fetched+{number_of_posts} WHERE site = '{constants.URL}';"
             execute_query(update_log_table_query)
-        if post_title_list != []:
+        if post_title_list != {}:
             if self.otl:
                 send_email_notification(subject=f"OTL DATA FETCHED FOR {constants.URL}", msg=post_title_list)
             else:
