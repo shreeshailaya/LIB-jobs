@@ -4,10 +4,18 @@ from decouple import config
 from api_call import ApiCall
 from operations import initial_site_registration
 from utility import send_email_notification
+from sql_connector import execute_query
+
+
 api_call = ApiCall()
 if __name__ == '__main__':
-    env_variables = config("SITES_DATA")
-    env_variables = json.loads(env_variables)
+    config_table = config("CONFIG_TABLE")
+    site = config("SITE")
+    env = config("ENV")
+    env_properties_query = f"SELECT data FROM {config_table} where site='{site}' and env='{env}'"
+    data = execute_query(env_properties_query)
+    data = data[0]['data']
+    env_variables = json.loads(data)
     try:
         for key in env_variables:
             url = env_variables[key]["url"]
