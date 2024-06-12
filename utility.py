@@ -44,6 +44,7 @@ def publish_post(title,post_content, tags):
         'content': post_content,
         'status': 'publish',
         "categories": json.loads(tags),
+        "comment_status": "closed"
         # 'meta':{
         # 'company_name':'abc',
         # 'job___':"zxc"
