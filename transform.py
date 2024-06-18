@@ -23,14 +23,14 @@ class Transform():
         if instagram_link:
             for a in soup.find_all('a', href=True):
                 url = a['href']
-            if url.lower().startswith('https://instagram.com'):
-                a['href'] = instagram_link
+                if url.lower().startswith('https://instagram.com'):
+                    a['href'] = instagram_link
         
         if telegram_link:
             for a in soup.find_all('a', href=True):
                 url = a['href']
-            if url.lower().startswith('https://telegram.dog'):
-                a['href'] = telegram_link
+                if url.lower().startswith('https://telegram.dog'):
+                    a['href'] = telegram_link
 
         # Replace website links
         if website_link:
