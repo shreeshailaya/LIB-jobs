@@ -2,12 +2,11 @@ from decouple import config
 from utility import send_email_notification, publish_post, tag_generator
 from sql_connector import execute_query
 import constants
-from transform import Transform
+from transform import transformer
 from datetime import datetime, timedelta
 import requests 
 
 
-transform = Transform()
 class ApiCall():
 
     def convertURL(self, url):
@@ -56,7 +55,7 @@ class ApiCall():
                 if datetime.fromisoformat(post["date"]) < offset_time:
                     title = post["title"]["rendered"]
                     content = post["content"]["rendered"]
-                    content = transform.link_transformer(content)
+                    content = transformer(content)
                     post_ids_list.append(post["id"])
                     self.tags = tag_generator(title=title, tags=self.tags)
                     slug, link = publish_post(post_content=content, title=title, tags=self.tags)
@@ -67,7 +66,7 @@ class ApiCall():
                 if int(post["id"]) > last_fetched_id:
                     title = post["title"]["rendered"]
                     content = post["content"]["rendered"]
-                    content = transform.link_transformer(content)
+                    content = transformer(content)
                     post_ids_list.append(post["id"])
                     self.tags = tag_generator(title=title, tags=self.tags)
                     slug, link = publish_post(tags=self.tags,post_content=content, title=title)
