@@ -30,6 +30,7 @@ def link_transformer(soup):
     whatsapp_link= config("whatsapp_link")
     instagram_link = config("instagram_link")
     telegram_link = config("telegram_link")
+    youtube_link = config("youtube_link")
     
 
     # Replace WhatsApp links
@@ -38,6 +39,12 @@ def link_transformer(soup):
             url = a['href']
             if url.lower().startswith('https://whatsapp.com'):
                 a['href'] = whatsapp_link
+    
+    if youtube_link:
+        for a in soup.find_all('a', href=True):
+            url = a['href']
+            if url.lower().startswith('https://www.youtube.com'):
+                a['href'] = youtube_link
 
     # Replace Instagram links
     if instagram_link:
