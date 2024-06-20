@@ -43,6 +43,7 @@ def publish_post(title,post_content, tags):
         'title': title,
         'content': post_content,
         'status': 'publish',
+        "type": "post",
         "categories": json.loads(tags),
         "comment_status": "closed"
         # 'meta':{
