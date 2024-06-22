@@ -56,13 +56,13 @@ def link_transformer(soup):
     if telegram_link:
         for a in soup.find_all('a', href=True):
             url = a['href']
-            if url.lower().startswith('https://telegram.dog'):
+            if url.lower().startswith('https://telegram.dog') or url.lower().startswith('https://telegram.me/'):
                 a['href'] = telegram_link
 
     # Replace website links
     if website_link:
         for a in soup.find_all('a', href=True):
             url = a['href']
-            if url.startswith(constants.URL):
+            if url.startswith(constants.URL) or url.lower().startswith('https://www.facebook.com'):
                 a['href'] = website_link
     return soup
