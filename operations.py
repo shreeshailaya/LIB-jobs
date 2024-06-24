@@ -33,7 +33,7 @@ def telegram_bot(title, content, url):
             print(f"Message sent to channel {CHANNEL_ID}")
         except TelegramError as e:
             send_email_notification(subject=f"Failed telegram message on {constants.URL}", msg=e)
-            print(f"Failed to send message: {e}")
+            print(f"Failed to send message telegram: {e}")
     loop = asyncio.get_event_loop()
     try:
         loop.run_until_complete(send_message(message))
