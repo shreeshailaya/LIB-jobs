@@ -66,3 +66,22 @@ def link_transformer(soup):
             if url.startswith(constants.URL) or url.lower().startswith('https://www.facebook.com'):
                 a['href'] = website_link
     return soup
+
+def remove_html_tags(html):
+    # Parse the HTML content
+    html = html['raw']
+    soup = BeautifulSoup(html, "lxml")
+    # Remove any script and style tags
+    for script in soup(["script", "style"]):
+        script.extract()
+    # Get the plain text
+    text = soup.get_text()
+    return text
+
+def message_creator(title, url, content):
+    content =  remove_html_tags(content)
+    words = content.split()
+    selected_words = words[:55]
+    content = ' '.join(selected_words)
+    message = f"{title} \n \n{content} \n \n{url}"
+    return message

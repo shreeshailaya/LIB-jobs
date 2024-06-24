@@ -5,6 +5,7 @@ import constants
 from transform import transformer
 from datetime import datetime, timedelta
 import requests 
+from operations import telegram_bot
 
 
 class ApiCall():
@@ -69,7 +70,8 @@ class ApiCall():
                     content = transformer(content)
                     post_ids_list.append(post["id"])
                     self.tags = tag_generator(title=title, tags=self.tags)
-                    slug, link = publish_post(tags=self.tags,post_content=content, title=title)
+                    slug, link, r_content = publish_post(tags=self.tags,post_content=content, title=title)
+                    telegram_bot(title=slug, url=link, content=r_content)
                     post_title_list[slug] = link
         if post_ids_list != []:
             max_of_ids = max(post_ids_list)
