@@ -59,7 +59,7 @@ class ApiCall():
                     content = transformer(content)
                     post_ids_list.append(post["id"])
                     self.tags = tag_generator(title=title, tags=self.tags)
-                    slug, link = publish_post(post_content=content, title=title, tags=self.tags)
+                    slug, link, r_content = publish_post(post_content=content, title=title, tags=self.tags)
                     post_title_list[slug] = link
                 else:
                     print("no post found ")
@@ -71,7 +71,7 @@ class ApiCall():
                     post_ids_list.append(post["id"])
                     self.tags = tag_generator(title=title, tags=self.tags)
                     slug, link, r_content = publish_post(tags=self.tags,post_content=content, title=title)
-                    telegram_bot(title=slug, url=link, content=r_content)
+                    # telegram_bot(title=slug, url=link, content=r_content)
                     post_title_list[slug] = link
         if post_ids_list != []:
             max_of_ids = max(post_ids_list)
