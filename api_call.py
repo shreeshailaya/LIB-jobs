@@ -2,10 +2,10 @@ from decouple import config
 from utility import send_email_notification, publish_post, tag_generator
 from sql_connector import execute_query
 import constants
-from transform import transformer
+from transformation.transform import transformer
 from datetime import datetime, timedelta
 import requests 
-from operations import telegram_bot
+from social.notifications import telegram_bot
 
 
 class ApiCall():
@@ -71,7 +71,7 @@ class ApiCall():
                     post_ids_list.append(post["id"])
                     self.tags = tag_generator(title=title, tags=self.tags)
                     slug, link, r_content = publish_post(tags=self.tags,post_content=content, title=title)
-                    # telegram_bot(title=slug, url=link, content=r_content)
+                    telegram_bot(title=slug, url=link, content=r_content)
                     post_title_list[slug] = link
         if post_ids_list != []:
             max_of_ids = max(post_ids_list)
