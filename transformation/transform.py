@@ -1,4 +1,5 @@
 import re
+import html
 from bs4 import BeautifulSoup
 import constants
 from decouple import config
@@ -79,6 +80,7 @@ def remove_html_tags(html):
     return text
 
 def message_creator(title, url, content):
+    title = html.unescape(title)
     content =  remove_html_tags(content)
     words = content.split()
     selected_words = words[:55]
