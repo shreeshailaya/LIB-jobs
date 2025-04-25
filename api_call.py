@@ -2,7 +2,7 @@ from decouple import config
 from utility import send_email_notification, publish_post, tag_generator
 from sql_connector import execute_query
 import constants
-from transformation.transform import transformer
+from transformation.transform import transformer, message_creator
 from datetime import datetime, timedelta
 import requests 
 from social.notifications import telegram_bot
@@ -43,46 +43,82 @@ class ApiCall():
             return None
         
     def dataFinishing(self, json_data):
-        current_time = datetime.now()
-        offset_time = current_time - timedelta(days=15)
-        post_ids_list = []
-        last_fetched_query = f"select last_fetched_id from {config('LOG_TABLE')} where site = '{constants.URL}'"
-        last_fetched_id = execute_query(last_fetched_query)
-        last_fetched_id = last_fetched_id[0]["last_fetched_id"]
-        post_title_list = {}
-        
-        for post in json_data:
-            if self.otl:
-                if datetime.fromisoformat(post["date"]) < offset_time:
-                    title = post["title"]["rendered"]
-                    content = post["content"]["rendered"]
-                    content = transformer(content)
-                    post_ids_list.append(post["id"])
-                    self.tags = tag_generator(title=title, tags=self.tags)
-                    slug, link, r_content = publish_post(post_content=content, title=title, tags=self.tags)
-                    post_title_list[slug] = link
-                else:
-                    print("no post found ")
-            else:
-                if int(post["id"]) > last_fetched_id:
-                    title = post["title"]["rendered"]
-                    content = post["content"]["rendered"]
-                    content = transformer(content)
-                    post_ids_list.append(post["id"])
-                    self.tags = tag_generator(title=title, tags=self.tags)
-                    slug, link, r_content = publish_post(tags=self.tags,post_content=content, title=title)
-                    telegram_bot(title=slug, url=link, content=r_content)
-                    post_title_list[slug] = link
-        if post_ids_list != []:
-            max_of_ids = max(post_ids_list)
-            number_of_posts = len(post_ids_list)
-            update_log_table_query = f"UPDATE {config('LOG_TABLE')} SET last_fetched_id = {max_of_ids}, total_no_of_posts_fetched = total_no_of_posts_fetched+{number_of_posts} WHERE site = '{constants.URL}';"
-            execute_query(update_log_table_query)
-        if post_title_list != {}:
-            if self.otl:
-                send_email_notification(subject=f"OTL DATA FETCHED FOR {constants.URL}", msg=post_title_list)
-            else:
-                send_email_notification(subject= f"Todays Jobs from {constants.URL} ",  msg=post_title_list)
+        try:
+            current_time = datetime.now()
+            offset_time = current_time - timedelta(days=15)
+            post_ids_list = []
+            last_fetched_query = f"select last_fetched_id from {config('LOG_TABLE')} where site = '{constants.URL}'"
+            last_fetched_id = execute_query(last_fetched_query)
+            last_fetched_id = last_fetched_id[0]["last_fetched_id"]
+            post_title_list = {}
+            
+            for post in json_data:
+                try:
+                    # Safely get post data with defaults
+                    post_id = post.get("id")
+                    post_date = post.get("date")
+                    title_data = post.get("title", {})
+                    content_data = post.get("content", {})
                     
+                    title = title_data.get("rendered", "")
+                    content = content_data.get("rendered", "")
+                    
+                    if not all([title, content]):
+                        print(f"Skipping post {post_id}: Missing title or content")
+                        continue
+                        
+                    if self.otl:
+                        if datetime.fromisoformat(post_date) < offset_time:
+                            content = transformer(content)
+                            post_ids_list.append(post_id)
+                            self.tags = tag_generator(title=title, tags=self.tags)
+                            slug, link, r_content, agani_url = publish_post(post_content=content, title=title, tags=self.tags)
+                            
+                            if all([slug, link, r_content, agani_url]):
+                                post_title_list[slug] = link
+                            else:
+                                print(f"Failed to publish post {post_id}: Missing required data")
+                        else:
+                            print(f"Post {post_id} is too recent, skipping")
+                    else:
+                        if int(post_id) > last_fetched_id:
+                            content = transformer(content)
+                            post_ids_list.append(post_id)
+                            self.tags = tag_generator(title=title, tags=self.tags)
+                            slug, link, r_content, agani_url = publish_post(tags=self.tags, post_content=content, title=title)
+                            
+                            if all([slug, link, r_content, agani_url]):
+                                try:
+                                    # Create message using message_creator
+                                    telegram_message = message_creator(title=title, url=link, content={"raw": r_content})
+                                    telegram_bot(title=telegram_message, url=link, content=agani_url)
+                                    post_title_list[slug] = link
+                                except Exception as telegram_error:
+                                    print(f"Error sending Telegram message for post {post_id}: {str(telegram_error)}")
+                            else:
+                                print(f"Failed to publish post {post_id}: Missing required data")
+                        else:
+                            print(f"Post {post_id} already processed, skipping")
+                            
+                except Exception as e:
+                    print(f"Error processing post {post_id}: {str(e)}")
+                    print(f"Post data: {post}")
+                    continue
+                    
+            if post_ids_list:
+                max_of_ids = max(post_ids_list)
+                number_of_posts = len(post_ids_list)
+                update_log_table_query = f"UPDATE {config('LOG_TABLE')} SET last_fetched_id = {max_of_ids}, total_no_of_posts_fetched = total_no_of_posts_fetched+{number_of_posts} WHERE site = '{constants.URL}';"
+                execute_query(update_log_table_query)
+                
+            if post_title_list:
+                if self.otl:
+                    send_email_notification(subject=f"OTL DATA FETCHED FOR {constants.URL}", msg=post_title_list)
+                else:
+                    send_email_notification(subject=f"Todays Jobs from {constants.URL}", msg=post_title_list)
+                    
+        except Exception as e:
+            print(f"Error in dataFinishing: {str(e)}")
+            send_email_notification(subject="Error in dataFinishing", msg=str(e))
 
                 
