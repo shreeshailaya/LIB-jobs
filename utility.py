@@ -56,6 +56,7 @@ def publish_post(title, post_content, tags):
             'Authorization': f"Bearer {config('WP_TOKEN')}"
         }
 
+        # Make direct request to create post
         response = requests.post(post_url, headers=headers, json=new_post_data)
         
         if response.status_code == 201:
@@ -64,13 +65,13 @@ def publish_post(title, post_content, tags):
             print(f'{str(current_timestamp)} New post ID:', data.get('id'))
             
             # Create Agani URL with post ID
-            agani_url = f"https://aganiai.com/job/{data.get('id')}"
+            agani_url = f"https://{config('agani_ai_url')}/job/{data.get('id')}"
             
             # Add AI preparation button to the post content
             ai_button = f'''
             <div style="text-align: center; margin: 20px 0;">
                 <a href="{agani_url}" style="display: inline-block; padding: 12px 25px; background: linear-gradient(45deg, #FF6B6B, #FF8E8E); color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; border: none; cursor: pointer;">
-                    🔥 Mock Interview with Aganiai.com
+                    🔥 Mock Interview with {config("agani_ai_url")}
                 </a>
             </div>
             '''

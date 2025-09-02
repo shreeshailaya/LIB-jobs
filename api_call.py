@@ -12,9 +12,9 @@ class ApiCall():
 
     def convertURL(self, url):
         if self.otl:
-            url = url+"wp-json/wp/v2/posts?per_page=100"
+            url = url+"wp-json/wp/v2/posts?per_page=100?order=desc"
         else:
-            url = url+"wp-json/wp/v2/posts"
+            url = url+"wp-json/wp/v2/posts?order=desc"
         return url
     
     def makeApiRequest(self, url, tags, site_id, otl):
